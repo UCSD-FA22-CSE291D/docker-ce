@@ -7,13 +7,7 @@ import (
 )
 
 type apiClientExperimental interface {
-	MigrationAPIClient
 	CheckpointAPIClient
-}
-
-// MigrationAPIClient defines API client methods for the migration
-type MigrationAPIClient interface {
-	ContainerMigrate(ctx context.Context, container string, options types.MigrationOptions) error
 }
 
 // CheckpointAPIClient defines API client methods for the checkpoints

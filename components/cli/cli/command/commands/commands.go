@@ -11,7 +11,6 @@ import (
 	"github.com/docker/cli/cli/command/context"
 	"github.com/docker/cli/cli/command/image"
 	"github.com/docker/cli/cli/command/manifest"
-	"github.com/docker/cli/cli/command/migrate"
 	"github.com/docker/cli/cli/command/network"
 	"github.com/docker/cli/cli/command/node"
 	"github.com/docker/cli/cli/command/plugin"
@@ -29,9 +28,6 @@ import (
 // AddCommands adds all the commands from cli/command to the root command
 func AddCommands(cmd *cobra.Command, dockerCli command.Cli) {
 	cmd.AddCommand(
-		// migrate
-		migrate.NewMigrateCommand(dockerCli),
-
 		// checkpoint
 		checkpoint.NewCheckpointCommand(dockerCli),
 
