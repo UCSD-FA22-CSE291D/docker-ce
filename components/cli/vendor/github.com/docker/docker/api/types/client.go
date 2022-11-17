@@ -10,6 +10,12 @@ import (
 	units "github.com/docker/go-units"
 )
 
+// MigrationOptions holds parameters to do live migration for a container
+type MigrationOptions struct {
+	TargetAddr string
+	Exit       bool
+}
+
 // CheckpointCreateOptions holds parameters to create a checkpoint from a container
 type CheckpointCreateOptions struct {
 	CheckpointID  string
