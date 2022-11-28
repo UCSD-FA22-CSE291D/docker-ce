@@ -48,7 +48,7 @@ func runCreate(dockerCli command.Cli, opts createOptions) error {
 	checkpointOpts := types.CheckpointCreateOptions{
 		CheckpointID:       opts.checkpoint,
 		CheckpointDir:      opts.checkpointDir,
-		Exit:               !opts.leaveRunning && !opts.predump,
+		Exit:               !opts.leaveRunning || !opts.predump,
 		Predump:            opts.predump,
 		ParentCheckpointID: opts.parentCheckpointId,
 	}
