@@ -11,10 +11,10 @@ import (
 )
 
 type migrateOptions struct {
-	container    string
-	target       string
-	diskless     bool
-	leaveRunning bool
+	srcDockerAddr string
+	dstDockerAddr string
+	containerId   string
+	predump       bool
 }
 
 // NewMigrateCommand creates a new `docker migrate` command
@@ -26,16 +26,16 @@ func NewMigrateCommand(dockerCli command.Cli) *cobra.Command {
 		Short: "Live migration of a running container",
 		Args:  cli.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.container = args[0]
-			opts.target = args[1]
+			opts.srcDockerAddr = args[0]
+			opts.dstDockerAddr = args[1]
+			opts.containerId = args[2]
 			return runMigrate(dockerCli, opts)
 		},
 	}
 
 	flags := cmd.Flags()
 
-	flags.BoolVar(&opts.diskless, "diskless", false, "Use diskless migration")
-	flags.BoolVar(&opts.leaveRunning, "leave-running", false, "Leave the container running after migration")
+	flags.BoolVar(&opts.predump, "predump", false, "Use predump migration")
 
 	return cmd
 }
@@ -44,15 +44,16 @@ func runMigrate(dockerCli command.Cli, opts migrateOptions) error {
 	client := dockerCli.Client()
 
 	migrationOpts := types.MigrationOptions{
-		TargetAddr: opts.target,
-		Exit:       !opts.leaveRunning,
+		SrcDockerdAddr: opts.srcDockerAddr,
+		DstDockerdAddr: opts.dstDockerAddr,
+		Predump:        opts.predump,
 	}
 
-	err := client.ContainerMigrate(context.Background(), opts.container, migrationOpts)
+	err := client.ContainerMigrate(context.Background(), opts.containerId, migrationOpts)
 	if err != nil {
 		return err
 	}
 
-	fmt.Fprintf(dockerCli.Out(), "%s\n", opts.target)
+	fmt.Fprintf(dockerCli.Out(), "%s\n", opts.dstDockerAddr)
 	return nil
 }

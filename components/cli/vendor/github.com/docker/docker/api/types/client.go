@@ -12,8 +12,9 @@ import (
 
 // MigrationOptions holds parameters to do live migration for a container
 type MigrationOptions struct {
-	TargetAddr string
-	Exit       bool
+	SrcDockerdAddr string
+	DstDockerdAddr string
+	Predump        bool
 }
 
 // CheckpointCreateOptions holds parameters to create a checkpoint from a container
